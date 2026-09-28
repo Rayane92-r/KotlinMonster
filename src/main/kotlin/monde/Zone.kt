@@ -14,7 +14,7 @@ import org.ldv.monstre.EspeceMonstre
  * @property expZone Quantité d'expérience associée à la zone.
  * @property especesMonstres Liste mutable des espèces de monstres présentes.
  * @property zoneSuivante Zone suivante dans la chaîne, ou null si elle n'existe pas.
- * @property zonePrecedante Zone précédente dans la chaîne, ou null si elle n'existe pas.
+ * @property zonePrecedente Zone précédente dans la chaîne, ou null si elle n'existe pas.
  */
 class Zone(
     var id: Int,
@@ -22,7 +22,7 @@ class Zone(
     var expZone: Int,
     var especesMonstres: MutableList<EspeceMonstre> = mutableListOf(),
     var zoneSuivante: Zone? = null,
-    var zonePrecedante: Zone? = null
+    var zonePrecedente: Zone? = null
 ) {
 
     // TODO faire la méthode genereMonstre()

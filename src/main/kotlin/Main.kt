@@ -1,7 +1,10 @@
 package org.ldv
 
 import org.ldv.dresseur.Entraineur
+import org.ldv.monde.Zone
 import org.ldv.monstre.EspeceMonstre
+import org.ldv.monstre.IndividuMonstre
+
 
 var joueur = Entraineur(1, "Sacha", 100)
 /*
@@ -124,10 +127,39 @@ var especeGalum = EspeceMonstre(
     "Peut rester immobile des heures comme une statue.",
     "Sérieux, stoïque, fiable"
 )
+// Création de la première zone.
+var route1 = Zone(
+    1,
+    "Route 1",
+    10,
+    mutableListOf(especeSpringleaf, especeFlamkip)
+)
+
+// Création de la deuxième zone.
+var route2 = Zone(
+    2,
+    "Route 2",
+    20,
+    mutableListOf(especeAquamy, especeLaoumi)
+)
+
+// Création de la troisième zone.
+var route3 = Zone(
+    3,
+    "Route 3",
+    30,
+    mutableListOf(especeBugsface, especeGalum)
+)
+
 fun main() {
+// Créer un monstre pour tester l'affichage détaillé.
+    val monstre1 = IndividuMonstre(
+        1, "Springleaf", especeSpringleaf, null, 0.0
+    )
 
+// Afficher les caractéristiques du monstre.
+    monstre1.afficheDetail()
 }
-
 /**
  * Change la couleur du message donné selon le nom de la couleur spécifié.
  * Cette fonction utilise les codes d'échappement ANSI pour appliquer une couleur à la sortie console.
