@@ -1,9 +1,11 @@
 package org.ldv
 
 import org.ldv.dresseur.Entraineur
+import org.ldv.item.Badge
 import org.ldv.monde.Zone
 import org.ldv.monstre.EspeceMonstre
 import org.ldv.monstre.IndividuMonstre
+import org.ldv.item.MonsterKube
 
 
 var joueur = Entraineur(1, "Sacha", 100)
@@ -127,6 +129,7 @@ var especeGalum = EspeceMonstre(
     "Peut rester immobile des heures comme une statue.",
     "Sérieux, stoïque, fiable"
 )
+
 // Création de la première zone.
 var route1 = Zone(
     1,
@@ -152,14 +155,70 @@ var route3 = Zone(
 )
 
 fun main() {
-// Créer un monstre pour tester l'affichage détaillé.
-    val monstre1 = IndividuMonstre(
-        1, "Springleaf", especeSpringleaf, null, 0.0
+    // Créer un entraîneur.
+    val entraineur = Entraineur(1, "Rayane", 100)
+
+    // Créer un badge attribué à cet entraîneur.
+    val badgePierre = Badge(
+        1,
+        "Badge Roche",
+        "Badge gagné lorsque le joueur atteint l'arène de pierre.",
+        entraineur
     )
 
-// Afficher les caractéristiques du monstre.
-    monstre1.afficheDetail()
+    // Afficher les informations du badge.
+    println(badgePierre.id)
+    println(badgePierre.nom)
+    println(badgePierre.description)
+    println(badgePierre.champion.nom)
+
+    // Créer un monstre sauvage.
+    val cible = IndividuMonstre(
+        1,
+        "Springleaf",
+        especeSpringleaf,
+        null,
+        0.0
+    )
+
+    // Créer un MonsterKube avec 50 % de chance de capture.
+    val kube = MonsterKube(
+        1,
+        "MonsterKube",
+        "Un objet permettant de capturer un monstre.",
+        50.0
+    )
+
+    // Tenter de capturer le monstre.
+    val captureReussie = kube.utiliser(cible)
+
+    // Vérifier si la capture a réussi.
+    if (captureReussie) {
+
+        // Associer le monstre à l'entraîneur.
+        cible.entraineur = entraineur
+
+        // Ajouter le monstre à l'équipe si elle contient moins de 6 monstres.
+        if (entraineur.equipeMonstre.size < 6) {
+            entraineur.equipeMonstre.add(cible)
+            println("Le monstre a été ajouté à l'équipe.")
+        } else {
+            // Sinon, ajouter le monstre dans la boîte.
+            entraineur.boiteMonstre.add(cible)
+            println("Le monstre a été ajouté à la boîte.")
+        }
+    }
+
+    // Ajouter le Kube dans le sac de l'entraîneur.
+    entraineur.sacAItems.add(kube)
+
+    // Afficher le contenu du sac.
+    println("Contenu du sac :")
+    entraineur.sacAItems.forEach {
+        println(it.nom)
+    }
 }
+
 /**
  * Change la couleur du message donné selon le nom de la couleur spécifié.
  * Cette fonction utilise les codes d'échappement ANSI pour appliquer une couleur à la sortie console.

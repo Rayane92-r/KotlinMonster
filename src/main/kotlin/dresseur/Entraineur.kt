@@ -2,6 +2,7 @@ package org.ldv.dresseur
 
 // Importer la classe IndividuMonstre.
 import org.ldv.monstre.IndividuMonstre
+import org.ldv.item.Item
 
 /**
  * Représente un entraîneur dans le contexte du jeu.
@@ -27,9 +28,10 @@ class Entraineur(
     var equipeMonstre: MutableList<IndividuMonstre> = mutableListOf(),
 
     // Liste des monstres stockés dans la boîte.
-    var boiteMonstre: MutableList<IndividuMonstre> = mutableListOf()
+    var boiteMonstre: MutableList<IndividuMonstre> = mutableListOf(),
 
-    // TODO sacAKube : à compléter avec le type de la classe MonsterKube.
+    // Liste des objets présents dans le sac.
+    var sacAItems: MutableList<Item> = mutableListOf()
 ) {
     /**
      * Affiche les détails de l'entraîneur.
