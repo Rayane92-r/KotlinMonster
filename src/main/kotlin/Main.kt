@@ -6,9 +6,13 @@ import org.ldv.monde.Zone
 import org.ldv.monstre.EspeceMonstre
 import org.ldv.monstre.IndividuMonstre
 import org.ldv.item.MonsterKube
-
+import org.ldv.jeu.Partie
+import org.ldv.monstre.CombatMonstre
 
 var joueur = Entraineur(1, "Sacha", 100)
+
+var rival = Entraineur(2, "Rival", 500)
+
 /*
  * Création de l'espèce Springleaf.
  * Identifiant : 1.
@@ -29,6 +33,7 @@ var especeSpringleaf = EspeceMonstre(
     "Sa feuille sur la tête indique son humeur.",
     "Curieux, amical, timide"
 )
+
 /*
  * Création de l'espèce Flamkip.
  * Identifiant : 4.
@@ -49,6 +54,7 @@ var especeFlamkip = EspeceMonstre(
     "Sa flamme change d'intensité selon son énergie.",
     "Impulsif, joueur, loyal"
 )
+
 /*
  * Création de l'espèce Aquamy.
  * Identifiant : 7.
@@ -69,6 +75,7 @@ var especeAquamy = EspeceMonstre(
     "Fait baisser la température en s'endormant.",
     "Calme, rêveur, mystérieux"
 )
+
 /*
  * Création de l'espèce Laoumi.
  * Identifiant : 8.
@@ -89,6 +96,7 @@ var especeLaoumi = EspeceMonstre(
     "Son grognement est mignon mais il protège ses amis.",
     "Affectueux, protecteur, gourmand"
 )
+
 /*
  * Création de l'espèce Bugsface.
  * Identifiant : 10.
@@ -109,6 +117,7 @@ var especeBugsface = EspeceMonstre(
     "Sa carapace devient plus dure après chaque mue.",
     "Travailleur, sociable, infatigable"
 )
+
 /*
  * Création de l'espèce Galum.
  * Identifiant : 13.
@@ -130,20 +139,37 @@ var especeGalum = EspeceMonstre(
     "Sérieux, stoïque, fiable"
 )
 
+// Création du Kube.
+var kube1 = MonsterKube(
+    id = 1,
+    nom = "Kube",
+    description = "Un petit kube pour capturer un monstre",
+    chanceCapture = 50.0
+)
+// Création de la première zone.
 // Création de la première zone.
 var route1 = Zone(
     1,
     "Route 1",
-    10,
-    mutableListOf(especeSpringleaf, especeFlamkip)
+    600,
+    especesMonstres = mutableListOf(
+        especeSpringleaf,
+        especeFlamkip,
+        especeAquamy,
+        especeLaoumi,
+        especeBugsface
+    )
 )
 
 // Création de la deuxième zone.
 var route2 = Zone(
     2,
     "Route 2",
-    20,
-    mutableListOf(especeAquamy, especeLaoumi)
+    800,
+    especesMonstres = mutableListOf(
+        especeSpringleaf,
+        especeGalum
+    )
 )
 
 // Création de la troisième zone.
@@ -154,71 +180,46 @@ var route3 = Zone(
     mutableListOf(especeBugsface, especeGalum)
 )
 
-fun main() {
-    // Créer un entraîneur.
-    val entraineur = Entraineur(1, "Rayane", 100)
+/**
+ * Crée une nouvelle partie.
+ */
+fun nouvellePartie(): Partie {
 
-    // Créer un badge attribué à cet entraîneur.
-    val badgePierre = Badge(
-        1,
-        "Badge Roche",
-        "Badge gagné lorsque le joueur atteint l'arène de pierre.",
-        entraineur
+    // Affiche le message d'introduction.
+    println("Bienvenue dans le monde des monstres !")
+
+    // Demande le nom du joueur.
+    print("Entrez le nom de votre joueur : ")
+    val nom = readln()
+
+    // Modifie le nom du joueur.
+    joueur.nom = nom
+
+    // Crée et retourne une nouvelle partie.
+    return Partie(
+        id = 1,
+        joueur = joueur,
+        zone = route1
     )
-
-    // Afficher les informations du badge.
-    println(badgePierre.id)
-    println(badgePierre.nom)
-    println(badgePierre.description)
-    println(badgePierre.champion.nom)
-
-    // Créer un monstre sauvage.
-    val cible = IndividuMonstre(
-        1,
-        "Springleaf",
-        especeSpringleaf,
-        null,
-        0.0
-    )
-
-    // Créer un MonsterKube avec 50 % de chance de capture.
-    val kube = MonsterKube(
-        1,
-        "MonsterKube",
-        "Un objet permettant de capturer un monstre.",
-        50.0
-    )
-
-    // Tenter de capturer le monstre.
-    val captureReussie = kube.utiliser(cible)
-
-    // Vérifier si la capture a réussi.
-    if (captureReussie) {
-
-        // Associer le monstre à l'entraîneur.
-        cible.entraineur = entraineur
-
-        // Ajouter le monstre à l'équipe si elle contient moins de 6 monstres.
-        if (entraineur.equipeMonstre.size < 6) {
-            entraineur.equipeMonstre.add(cible)
-            println("Le monstre a été ajouté à l'équipe.")
-        } else {
-            // Sinon, ajouter le monstre dans la boîte.
-            entraineur.boiteMonstre.add(cible)
-            println("Le monstre a été ajouté à la boîte.")
-        }
-    }
-
-    // Ajouter le Kube dans le sac de l'entraîneur.
-    entraineur.sacAItems.add(kube)
-
-    // Afficher le contenu du sac.
-    println("Contenu du sac :")
-    entraineur.sacAItems.forEach {
-        println(it.nom)
-    }
 }
 
+fun main() {
+    // Définir les zones suivantes et précédentes.
+    route1.zoneSuivante = route2
+    route2.zonePrecedente = route1
+
+    // Ajouter le Kube dans le sac du joueur.
+    joueur.sacAItems.add(kube1)
+
+    // Créer une nouvelle partie.
+    val partie = nouvellePartie()
+
+    // Choisir le monstre de départ.
+    partie.choixStarter()
+
+    // Lancer le jeu.
+    partie.zone.jouer()
+}
 /**
  * Change la couleur du message donné selon le nom de la couleur spécifié.
  * Cette fonction utilise les codes d'échappement ANSI pour appliquer une couleur à la sortie console.
@@ -227,7 +228,6 @@ fun main() {
  * @param couleur Le nom de la couleur à appliquer.
  * @return Le message coloré sous forme de chaîne.
  */
-
 fun changeCouleur(message: String, couleur: String = ""): String {
     val reset = "\u001B[0m"
 
